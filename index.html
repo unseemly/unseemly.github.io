@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Unseemly by unseemly</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Unseemly</h1>
+        <p class="header">Macros have types!</p>
+
+
+
+        <ul>
+          <li><a class="buttons github" href="https://github.com/unseemly">GitHub Profile</a></li>
+        </ul>
+
+      </header>
+      <section>
+        <p><em>Unseemly is still missing some vital pieces. The text below is not yet true.</em></p>
+
+<p>Types are great! Macros are great! But they have historically not played well together.</p>
+
+<p>Unseemly is (to my knowledge) the first typed macro-based language.</p>
+
+<h3>
+<a id="typed-languages-and-macro-based-languages" class="anchor" href="#typed-languages-and-macro-based-languages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Typed languages and macro-based languages</h3>
+
+<p>I like to divide the design of programming languages into two main families. 
+There are other, no-less-valid, ways of looking at them,
+ but this one appeals to me.</p>
+
+<p>One family, the typed languages,
+ includes the MLs and Haskell, as well as C++, Java, Rust, and so on.
+Programmers in those languages use type systems
+ to both describe data they are interested in and to express invariants.</p>
+
+<p>The macro-based languages are a smaller family.
+These are mostly direct descendants of Lisp: Scheme, and Racket, etc.
+(If you squint, the dynamic metaprogramming systems of Ruby and JavaScript
+ make them part of the family, too.)
+Programmers in those languages use metaprogramming to 
+ abstract over surface syntax, control flow, and binding.</p>
+
+<p>But if you write in a typed language, 
+ you almost certainly hear the advice to use the macro system sparingly.
+And Lisps (usually) lack a type system altogether.
+Why?
+Type errors in macro-generated code 
+ are incredibly difficult to understand.</p>
+
+<p>This is no small issue.
+Type errors are the user interface of a typed language;
+ the primary purpose of types is to produce useful error messages.</p>
+
+<p>Rule that I just made up:
+ If the programmer is responsible for generated code,
+  code generation is not an abstraction.</p>
+
+<h3>
+<a id="unseemly" class="anchor" href="#unseemly" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Unseemly</h3>
+
+<p>(Here's where I start making bold claims,
+  which could all be undone 
+   if there's a theoretical error in Unseemly's design.
+ But the vast majority of Unseemly
+  is stolen from existing languages or at least existing research.)</p>
+
+<p>In Unseemly, macros always generate typesafe code,
+ so macros feel solid, like built-in language parts or Scheme macros, 
+  and the typechecker can only complain about the code you wrote.</p>
+
+<p>And Unseemly doesn't cheap out on the macro or type systems!
+The macro system is procedural, hygienic, and has access to syntax quotation.
+The type system is algebraic, sound (I hope!), and has access to pattern-matching.</p>
+
+<p>If I'm making this sound magic, it's not; 
+ it relies on the macro definitions being well-typed,
+  just like code normally relies on libraries being well-typed.
+Well, there's a lot of technical stuff behind-the-scenes,
+ but, like I said, it's mostly stolen.</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
