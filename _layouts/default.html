@@ -4,6 +4,8 @@
 			<meta charset="utf-8">
 			<meta http-equiv="X-UA-Compatible" content="chrome=1">
 			<title>{{ page.title }}</title>
+			
+			
 			<link rel="stylesheet" type="text/css" href="/stylesheets/styles.css">
 			<link rel="stylesheet" type="text/css" href="/stylesheets/github-light.css">
 			<script src="javascripts/scale.fix.js"></script>
@@ -13,7 +15,7 @@
 			<![endif]-->
 		</head>
 		<body>
-			<div>
+			<div class="wrapper">
 				<header>
 					<h1 class="header">Unseemly</h1>
 					<p class="header">Macros have types!</p>
@@ -22,9 +24,11 @@
 					</ul>
 
 				</header>
+				<section>
+					{{ content }}
+				</section>
+
 			</div>
-			<section>
-				{{ content }}
-			</section>
+			<!--[if !IE]><script>fixScale(document);</script><![endif]-->
 		</body>
 	</html>
