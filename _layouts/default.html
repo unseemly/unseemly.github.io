@@ -4,22 +4,22 @@
 			<title>{{ page.title }}</title>
 			<link rel="stylesheet" type="text/css" href="/stylesheets/styles.css">
 			<link rel="stylesheet" type="text/css" href="/stylesheets/github-light.css">
+			<script src="javascripts/scale.fix.js"></script>
+			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 		</head>
 		<body>
-			<nav>
-	    		<ul>
-	        		<li><a href="/">Home</a></li>
-	    		</ul>
-			</nav>
-			<div class="container">
-			
-			{{ content }}
-			
-			</div><!-- /.container -->
-			<footer>
-	    		<ul>
-	        		<li><a href="https://github.com/paul_stansifer/unseemly">github.com/paul_stansifer/unseemly</a></li>
-				</ul>
-			</footer>
+			<div class="wrapper">
+				<header>
+					<h1 class="header">Unseemly</h1>
+					<p class="header">Macros have types!</p>
+					<ul>
+					  <li><a class="buttons github" href="https://github.com/unseemly">GitHub Profile</a></li>
+					</ul>
+
+				</header>
+			</div>
+			<section class="container">
+				{{ content }}
+			</section>
 		</body>
 	</html>
