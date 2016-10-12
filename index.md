@@ -2,6 +2,5 @@
 layout: default
 title: Unseemly
 ---
-<div>
-	Unseemly!
-</div>
+### Unseemly!
+Unseemly!
