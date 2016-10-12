@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 	<html>
 		<head>
+			<meta charset="utf-8">
+			<meta http-equiv="X-UA-Compatible" content="chrome=1">
 			<title>{{ page.title }}</title>
 			<link rel="stylesheet" type="text/css" href="/stylesheets/styles.css">
 			<link rel="stylesheet" type="text/css" href="/stylesheets/github-light.css">
 			<script src="javascripts/scale.fix.js"></script>
 			<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+			<!--[if lt IE 9]>
+			<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+			<![endif]-->
 		</head>
 		<body>
-			<div class="wrapper">
+			<div>
 				<header>
 					<h1 class="header">Unseemly</h1>
 					<p class="header">Macros have types!</p>
@@ -18,7 +23,7 @@
 
 				</header>
 			</div>
-			<section class="container">
+			<section>
 				{{ content }}
 			</section>
 		</body>
