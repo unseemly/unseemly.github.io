@@ -54,9 +54,11 @@ In Unseemly, macros always generate typesafe code,
  so macros feel solid, like Scheme macros,
   and the typechecker can only complain about the code you wrote.
 
-Unseemly's macro system is procedural, hygienic, and has access to syntax quotation.
+Unseemly's macro system is procedural, hygienic, 
+ and has access to syntax quotation.
 
-Unseemly's type system is algebraic, sound (I hope!), and has access to pattern-matching.
+Unseemly's type system is algebraic, sound (I hope!), 
+ and has access to pattern-matching.
 
 ## Don't program in Unseemly!
 
@@ -94,11 +96,31 @@ If you write a library in one Unseemly-backed language,
   will be able to use your library
    as if it were written in their language.
    
-This is why Unseemly's type system looks like the type system of a "real" language;
- many libraries are just a bunch of functions with types.
+This is why Unseemly's type system looks like  
+ the type system of a "real" language;
+  many libraries are just a bunch of functions with types.
 If the type systems are the same, libraries can be language-agnostic.
 
 Dynamically-typed languages get to use statically-typed libraries,
  and vice-versa.
  
+## This means you!
 
+When I say "implement the language you've always been meaning to make"
+ in Unseemly, I'm talking to you.
+ 
+The only thing I know about you is that you've read
+ a big wall of text about a new programming language.
+If you care about programming languages that much,
+ you should go ahead and make one.
+
+And don't listen to people who say that writing compilers is hard. 
+If you're a programmer, you know that programming consists of
+ figuring out how to do something,
+  and making the computer do it for you instead.
+Writing a compiler is just the case where
+ "something" equals "write tedious code".
+ 
+Unseemly's macro system is meant for language implementation,
+ but mainly that just means that you can get to the good stuff faster.
+You can do it in any language you want.
