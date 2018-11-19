@@ -3,11 +3,11 @@ layout: default
 title: Unseemly
 ---
 
-_Unseemly is still missing some vital pieces. This whole description is not yet true._
+_Unseemly is still missing some vital pieces; this is based on what it should become._
 
 Unseemly is (to my knowledge) the first typed macro-based language.
 
-Types are great! Macros are great! But they have historically not played well together.
+I want to use types and macros, but they have historically not played well together.
 
 # Typed languages and macro-based languages
 
@@ -44,83 +44,107 @@ Rule that I just made up:
 
 # Unseemly
 
-(Here's where I start making bold claims,
+Languages descended from ML often have names with "ML" in them.
+Languages descended from Scheme often have names suggesting nefarious behavior.
+Unseemly is both a Scheme and an ML.
+
+*(Here's where I start making bold claims,
   which could all be undone 
    if there's a theoretical error in Unseemly's design.
  But the vast majority of Unseemly
-  is stolen from existing languages or at least existing research.)
+  is stolen from existing languages or at least existing research.)*
 
-In Unseemly, macros always generate typesafe code,
- so macros feel solid, like Scheme macros,
-  and the typechecker can only complain about the code you wrote.
+In almost any language with a type system,
+ type errors don't expose the details of the functions you're trying to invoke.
+In Unseemly, the same is true of macros!
+Like in Scheme, user-defined macros feel solid, as if they were built in to the language.
 
 Unseemly's macro system is procedural, hygienic, 
- and has access to syntax quotation.
+ and has access to syntax quotation,
+  just like Scheme's.
 
 Unseemly's type system is algebraic, sound (I hope!), 
- and has access to pattern-matching.
+ and has access to pattern-matching,
+  just like the ML's.
 
 ## Don't program in Unseemly!
 
 Unseemly might have sophisticated type and macro systems,
  but it has _almost nothing_ else.
-You don't want to program in it.
+It's missing a lot of convenience features,
+ and you don't want to live without them.
 
-Instead, implement the language you've always been meaning to make
- in Unseemly's macro system.
+Instead, try adding those convenience features to Unseemly;
+ it's easier than living without them.
+Come up with a better syntax, too; it's easy.
+In other words, implement the language you've always been meaning to make
+ as a set of Unseemly macros.
 
-Don't worry if you don't want a languague with macros;
- you can unbind the macro-definition construct.
-And don't worry if you don't want types;
- untyped languages invisibly use the `Any` type everywhere.
+Not just if you want a typed macro language
+ (though the world needs a good one, and Unseemly isn't it).
+But use Unseemly because it's a great way to write a compiler.
 
 There are two reasons that you should use Unseemly as your core language:
 
 ### Macros make easy compilers easy, and hard compilers possible
 
-A lot of language forms are possible to write 
- as simple pattern-matching transformers,
-  which are easy to write and easy to understand.
-
-Unseemly lets you write pattern-matching macros
-  when they're appropriate,
- and arbitrary code generation when it's necessary.
-
-The two systems smoothly transition into each other,
- which is a trick picked up from Racket.
+Writing a simple macro in C is easy,
+ as long as you ignore all of the jankiness of the C macro system.
+ 
+You can get something almost as simple, and about 0% as janky,
+ if your language has syntax quotation.
+ 
+Unseemly's macro system is procedural.
+However, syntax quotation means that writing pattern-match macros
+ (like `syntax-rules` in Scheme or `macro_rules!` in Rust)
+ is a piece of cake, 
+  and adding a "little bit of proceduralness" is straightforward.
+(This is like how, in Scheme, `syntax-rules` is just a
+ thin wrapper around the `syntax-case` procedural macros.)
 
 ### Most libraries can be shared between Unseemly languages
 
 If you write a library in one Unseemly-backed language,
  in most cases, anyone in any other Unseemly-backed language
   will be able to use your library
-   as if it were written in their language.
+   as if it were written in their language (i.e., without an FFI).
+(This is like the relationship between Clojure and Java.)
    
-This is why Unseemly's type system looks like  
+This is why Unseemly's type system looks like
  the type system of a "real" language;
   many libraries are just a bunch of functions with types.
-If the type systems are the same, libraries can be language-agnostic.
+If the type systems are shared, libraries can be language-agnostic.
 
 Dynamically-typed languages get to use statically-typed libraries,
  and vice-versa.
  
-## This means you!
+## Compilers aren't that hard
 
-When I say "implement the language you've always been meaning to make"
- in Unseemly, I'm talking to you.
- 
-The only thing I know about you is that you've read
- a big wall of text about a new programming language.
-If you care about programming languages that much,
- you should go ahead and make one.
+Compilers have a reputation for being hard to write. This is basically wrong.
 
-And don't listen to people who say that writing compilers is hard. 
-If you're a programmer, you know that programming consists of
- figuring out how to do something,
-  and making the computer do it for you instead.
-Writing a compiler is just the case where
- "something" equals "write tedious code".
+It's true that writing everything from the tokenizer to the assembly code generator
+ for a complex language without using any outside libraries
+ is a huge undertaking.
  
-Unseemly's macro system is meant for language implementation,
- but mainly that just means that you can get to the good stuff faster.
-You can do it in any language you want.
+But that's the wrong comparison; it puts assembly language on an unearned pedestal.
+If you're a programmer in some language, 
+ you can already write a [transpiler] to that language (instead of assembly),
+  if you were willing to spend a month or two mucking around with strings.
+(A transpiler is a compiler written by someone who wanted to use it for something, 
+  rather than to keep working on it forever.)
+
+[transpiler]: http://composition.al/blog/2017/07/31/my-first-fifteen-compilers/
+
+Unseemly doesn't exist to make writing compilers *easier*; it's already not that hard.
+Unseemly makes it less tedious (with type-safe syntax quotation),
+ and gives you more of the goodies (parse errors, type errors)
+  that you shouldn't have to reimplement.
+Like, in order to implement Unseemly,
+ I needed to write a fairly complicated typechecker.
+I'm not an expert in types, so I just copied the rules out of [the brick wall book].
+No reason not to, really.
+
+[the brick wall book]: https://www.cis.upenn.edu/~bcpierce/tapl/
+
+Unseemly is meant for language implementation,
+ but all that means is that you can get to the good stuff faster.
