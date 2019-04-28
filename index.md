@@ -3,8 +3,10 @@ layout: default
 title: Unseemly
 ---
 
-_Unseemly is still missing some vital pieces; this is based on what it should become._
-
+*(Unseemly isn't done yet, so the claims I make about it aren't technically true yet.
+  But it's quite close!
+  Unless there's a fundamental flaw I haven't found yet.)*
+  
 Unseemly is (to my knowledge) the first typed macro-based language.
 
 I want to use types and macros, but they have historically not played well together.
@@ -21,7 +23,7 @@ Programmers in those languages use type systems
  to both describe data they are interested in and to express invariants.
 
 The other, smaller, family is macro-based languages.
-These are mostly direct descendants of Lisp: Scheme, and Racket.
+These are mostly direct descendants of Lisp, like Scheme and Racket.
 (If you squint, the dynamic metaprogramming systems of Ruby and JavaScript
  make them part of the family, too.)
 Programmers in those languages use metaprogramming to 
@@ -32,38 +34,32 @@ But if you write in a typed language,
   if at all.
 And Lisps (usually) lack a type system altogether.
 
-This is because type errors in macro-generated code 
- are incredibly difficult to understand.
+While type errors treat the functions you invoke as a black box,
+ as soon as a macro is involved, 
+  you have to wade through the macro-generated code
+   to figure out why the macro went wrong,
+  even if the error had nothing to do with the macro!
+And type errors are the user interface of a typed language;
+ they have to comprehensible!
 
-Type errors are the user interface of a typed language;
- the primary purpose of types is to produce useful error messages.
-
-Rule that I just made up:
- If the programmer is responsible for generated code,
-  code generation is not an abstraction.
+If the programmer is responsible for generated code,
+ code generation is not an abstraction.
 
 # Unseemly
 
 Languages descended from ML often have names with "ML" in them.
-Languages descended from Scheme often have names suggesting nefarious behavior.
+Languages descended from Scheme often have names suggesting improper behavior.
 Unseemly is both a Scheme and an ML.
 
-*(Here's where I start making bold claims,
-  which could all be undone 
-   if there's a theoretical error in Unseemly's design.
- But the vast majority of Unseemly
-  is stolen from existing languages or at least existing research.)*
-
-In almost any language with a type system,
- type errors don't expose the details of the functions you're trying to invoke.
-In Unseemly, the same is true of macros!
-Like in Scheme, user-defined macros feel solid, as if they were built in to the language.
+In Unseemly, macros have types!
+Type errors respect macros they same way they respect functions,
+ so macros feel like part of the language.
 
 Unseemly's macro system is procedural, hygienic, 
  and has access to syntax quotation,
   just like Scheme's.
 
-Unseemly's type system is algebraic, sound (I hope!), 
+Unseemly's type system is algebraic, generic,
  and has access to pattern-matching,
   just like the ML's.
 
@@ -118,6 +114,21 @@ If the type systems are shared, libraries can be language-agnostic.
 Dynamically-typed languages get to use statically-typed libraries,
  and vice-versa.
  
+### Inline language-switching
+
+Because Unseemly macros (and their associated changes to syntax) are scoped,
+ it's possible for multiple languages to coexist peacefully in the same file.
+
+It's pretty typical for little embedded bits of SQL, JavaScript, HTML,
+ or other random languages
+ to end up embedded in a program inside strings.
+
+But with Unseemly, embeddings can respect the actual syntax of the language being embedded,
+ and have type-safe interpolation.
+This prevents things like SQL injection, and means that the Unseemly auto-formatter
+ (uh, once we've written an auto-formatter)
+ can reformat the embedded code.
+ 
 ## Compilers aren't that hard
 
 Compilers have a reputation for being hard to write. This is basically wrong.
@@ -129,20 +140,22 @@ It's true that writing everything from the tokenizer to the assembly code genera
 But that's the wrong comparison; it puts assembly language on an unearned pedestal.
 If you're a programmer in some language, 
  you can already write a [transpiler] to that language (instead of assembly),
-  if you were willing to spend a month or two mucking around with strings.
-(A transpiler is a compiler written by someone who wanted to use it for something, 
+  if you're willing to spend a month or two mucking around with strings.
+(A "transpiler" is a compiler written by someone who wanted to use it for something, 
   rather than to keep working on it forever.)
 
 [transpiler]: http://composition.al/blog/2017/07/31/my-first-fifteen-compilers/
 
 Unseemly doesn't exist to make writing compilers *easier*; it's already not that hard.
 Unseemly makes it less tedious (with type-safe syntax quotation),
- and gives you more of the goodies (parse errors, type errors)
+ and gives you more of the goodies (type checking, pattern-matching)
   that you shouldn't have to reimplement.
 Like, in order to implement Unseemly,
  I needed to write a fairly complicated typechecker.
 I'm not an expert in types, so I just copied the rules out of [the brick wall book].
-No reason not to, really.
+Now I'm a non-expert with a typechecker, and with Unseemly, you can be, too!
+(Unless you are an expert in types,
+ in which case I could use your help sorting out some details...)
 
 [the brick wall book]: https://www.cis.upenn.edu/~bcpierce/tapl/
 
