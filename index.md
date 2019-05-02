@@ -4,12 +4,29 @@ title: Unseemly
 ---
 
 *(Unseemly isn't done yet, so the claims I make about it aren't technically true yet.
-  But it's quite close!
+  But it's pretty close!
   Unless there's a fundamental flaw I haven't found yet.)*
   
-Unseemly is (to my knowledge) the first typed macro-based language.
+Unseemly is the first programming language to have typed macros.
 
-I want to use types and macros, but they have historically not played well together.
+Typically, macro-based languages are untyped,
+ and programmers in typed languages are rightly reluctant to use macros,
+  because macros can make type errors incomprehensible.
+In Unseemly, the code that macros generate is automatically typesafe,
+ as long as the code the programmer writes passes typechecking,
+  so it can have the best of both worlds.
+(This has historically been difficult,
+  but recent research has cleared a path.)
+  
+If you want to implement a typed language, and the types are pretty normal,
+ you can write the whole language as Unseemly macros.
+Not only is that faster than writing the language from scratch 
+ (you get the typechecker for free!),
+ but Unseemly-based languages get to share libraries and tooling,
+  so once there's an Unseemly code-reformatter, it'll work for all Unseemly languages.
+
+Unseemly is utterly barebones right now,
+ but it has everything you need to grow a language.
 
 # Typed languages and macro-based languages
 
@@ -30,22 +47,21 @@ Programmers in those languages use metaprogramming to
  abstract over surface syntax, control flow, and binding.
 
 But if you write in a typed language, 
- you almost certainly hear the advice to use the macro system sparingly,
-  if at all.
+ you almost certainly hear the advice to use the macro system sparingly.
 And Lisps (usually) lack a type system altogether.
 
-While type errors treat the functions you invoke as a black box,
- as soon as a macro is involved, 
+While type errors respect *function* boundaries,
+ as soon as a *macro* is involved, 
   you have to wade through the macro-generated code
    to figure out why the macro went wrong,
   even if the error had nothing to do with the macro!
 And type errors are the user interface of a typed language;
- they have to comprehensible!
+ they have to be comprehensible!
 
-If the programmer is responsible for generated code,
+If the type system holds you responsible for generated code,
  code generation is not an abstraction.
 
-# Unseemly
+# Unseemly is a typed macro language
 
 Languages descended from ML often have names with "ML" in them.
 Languages descended from Scheme often have names suggesting improper behavior.
@@ -61,75 +77,24 @@ Unseemly's macro system is procedural, hygienic,
 
 Unseemly's type system is algebraic, generic,
  and has access to pattern-matching,
-  just like the ML's.
+  just like ML's.
+  
+These are all features that Unseemly has stolen from older, more respectable languages.
+The one new thing, which Unseemly needs to make macro types work, is called **alias annotations**.
+When you define a macro that binds names (like a lambda),
+ you have to specify in the syntax what the binders are and where they're bound.
 
-## Don't program in Unseemly!
+## Macro languages are extensible compilers
 
-Unseemly might have sophisticated type and macro systems,
- but it has _almost nothing_ else.
-It's missing a lot of convenience features,
- and you don't want to live without them.
+Macros are an ergonomic way to specify source-to-source translations.
+In other words, they're a great way to write a compiler.
 
-Instead, try adding those convenience features to Unseemly;
- it's easier than living without them.
-Come up with a better syntax, too; it's easy.
-In other words, implement the language you've always been meaning to make
- as a set of Unseemly macros.
+In macro-based languages, the language is typically composed of a small set of "core" forms,
+ and almost every language feature the user interacts with is a macro that expands to those forms.
+Language features can be built layer-by-layer, and, since they live in libraries,
+ they can be versioned separately from the core language.
 
-Not just if you want a typed macro language
- (though the world needs a good one, and Unseemly isn't it).
-But use Unseemly because it's a great way to write a compiler.
-
-There are two reasons that you should use Unseemly as your core language:
-
-### Macros make easy compilers easy, and hard compilers possible
-
-Writing a simple macro in C is easy,
- as long as you ignore all of the jankiness of the C macro system.
- 
-You can get something almost as simple, and about 0% as janky,
- if your language has syntax quotation.
- 
-Unseemly's macro system is procedural.
-However, syntax quotation means that writing pattern-match macros
- (like `syntax-rules` in Scheme or `macro_rules!` in Rust)
- is a piece of cake, 
-  and adding a "little bit of proceduralness" is straightforward.
-(This is like how, in Scheme, `syntax-rules` is just a
- thin wrapper around the `syntax-case` procedural macros.)
-
-### Most libraries can be shared between Unseemly languages
-
-If you write a library in one Unseemly-backed language,
- in most cases, anyone in any other Unseemly-backed language
-  will be able to use your library
-   as if it were written in their language (i.e., without an FFI).
-(This is like the relationship between Clojure and Java.)
-   
-This is why Unseemly's type system looks like
- the type system of a "real" language;
-  many libraries are just a bunch of functions with types.
-If the type systems are shared, libraries can be language-agnostic.
-
-Dynamically-typed languages get to use statically-typed libraries,
- and vice-versa.
- 
-### Inline language-switching
-
-Because Unseemly macros (and their associated changes to syntax) are scoped,
- it's possible for multiple languages to coexist peacefully in the same file.
-
-It's pretty typical for little embedded bits of SQL, JavaScript, HTML,
- or other random languages
- to end up embedded in a program inside strings.
-
-But with Unseemly, embeddings can respect the actual syntax of the language being embedded,
- and have type-safe interpolation.
-This prevents things like SQL injection, and means that the Unseemly auto-formatter
- (uh, once we've written an auto-formatter)
- can reformat the embedded code.
- 
-## Compilers aren't that hard
+### Aside: Compilers aren't that hard
 
 Compilers have a reputation for being hard to write. This is basically wrong.
 
@@ -138,17 +103,15 @@ It's true that writing everything from the tokenizer to the assembly code genera
  is a huge undertaking.
  
 But that's the wrong comparison; it puts assembly language on an unearned pedestal.
-If you're a programmer in some language, 
- you can already write a [transpiler] to that language (instead of assembly),
+If you're a programmer, you can already write a [compiler] to some language you know (instead of assembly),
   if you're willing to spend a month or two mucking around with strings.
-(A "transpiler" is a compiler written by someone who wanted to use it for something, 
-  rather than to keep working on it forever.)
 
-[transpiler]: http://composition.al/blog/2017/07/31/my-first-fifteen-compilers/
+[compiler]: http://composition.al/blog/2017/07/31/my-first-fifteen-compilers/
 
-Unseemly doesn't exist to make writing compilers *easier*; it's already not that hard.
+Unseemly (like other macro-based languages)
+ doesn't exist to make writing compilers *easier*; it's already not that hard.
 Unseemly makes it less tedious (with type-safe syntax quotation),
- and gives you more of the goodies (type checking, pattern-matching)
+ and gives you more of the goodies (type checking, pattern-matching, parsing)
   that you shouldn't have to reimplement.
 Like, in order to implement Unseemly,
  I needed to write a fairly complicated typechecker.
@@ -161,3 +124,61 @@ Now I'm a non-expert with a typechecker, and with Unseemly, you can be, too!
 
 Unseemly is meant for language implementation,
  but all that means is that you can get to the good stuff faster.
+ 
+## Most libraries can be shared between Unseemly languages
+
+If you write a library in one Unseemly-backed language,
+ in most cases, programmers other Unseemly-backed language
+  will be able to use your library without a foreign function interface.
+(This is like the relationship between Clojure and Java.)
+   
+This is why Unseemly's type system looks like
+ the type system of a "real" language;
+  many libraries are just a bunch of functions with types.
+If the type systems are shared, libraries can be language-agnostic.
+ 
+## Inline language-switching
+
+Because Unseemly macros (and their associated changes to syntax) are scoped,
+ it's possible for multiple languages to coexist on equal footing in the same file.
+
+Using syntax quotation rather than strings to embed code
+ prevents problems like SQL injection
+ and means that the Unseemly auto-formatter (uh, once someone writes one)
+  will format the quoted code.
+
+# What does Unseemly look like?
+
+Okay, I've been postponing showing you a code sample because Unseemly's syntax is *bats*.
+It looks like I was trying to come up with 
+ a grand unified theory of syntax from first principles,
+  which, embarassingly, I was.
+And if there was anything I thought a macro could do,
+ I've omitted it from the core language:
+  
+Here's a program to take the factorial of 5:
+```
+((fix .[ again : [ -> [ Int -> Int ]] .
+    .[ n : Int .
+        match (zero? n) {
+            +[True]+ => one
+            +[False]+ => (times n ((again) (minus n one)))
+        }
+    ].
+].) five)
+```
+It's in desparate need of an `if` macro, as well as one for function definition.
+
+Here's what that `if` macro looks like,
+ though the density of weird new syntax may make it hard to read:
+```
+forall T . '{ (lit if) cond = ,{Expr <[Bool]<},
+              (lit then) then_e = ,{Expr <[T]<},
+              (lit else) else_e = ,{Expr <[T]<}, }'
+ if_then_else_macro -> .{ 
+     '[Expr | match ,[Expr | cond], {
+         +[True]+  => ,[Expr | then_e],
+         +[False]+ => ,[Expr | else_e], } ]' }.
+```
+
+There's a lot of work to do!
