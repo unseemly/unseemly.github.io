@@ -37,7 +37,7 @@ It's not the only valid taxonomy,
 One family, the typed languages,
  includes the MLs and Haskell, as well as C++, Java, Rust, and so on.
 Programmers in those languages use type systems
- to both describe data they are interested in and to express invariants.
+ both to describe data they are interested in and to express invariants.
 
 The other, smaller, family is macro-based languages.
 These are mostly direct descendants of Lisp, like Scheme and Racket.
@@ -113,7 +113,7 @@ Unseemly (like other macro-based languages)
 Unseemly makes it less tedious (with type-safe syntax quotation),
  and gives you more of the goodies (type checking, pattern-matching, parsing)
   that you shouldn't have to reimplement.
-Like, in order to implement Unseemly,
+For example, in order to implement Unseemly,
  I needed to write a fairly complicated typechecker.
 I'm not an expert in types, so I just copied the rules out of [the brick wall book].
 Now I'm a non-expert with a typechecker, and with Unseemly, you can be, too!
@@ -121,9 +121,6 @@ Now I'm a non-expert with a typechecker, and with Unseemly, you can be, too!
  in which case I could use your help sorting out some details...)
 
 [the brick wall book]: https://www.cis.upenn.edu/~bcpierce/tapl/
-
-Unseemly is meant for language implementation,
- but all that means is that you can get to the good stuff faster.
  
 ## Most libraries can be shared between Unseemly languages
 
@@ -184,4 +181,14 @@ forall T . '{ (lit if) cond = ,{Expr <[Bool]<},
          +[False]+ => ,[Expr | else_e], } ]' }.
 ```
 
-There's a lot of work to do!
+Then we don't need to use `match` to implement a factorial function:
+
+```
+((fix .[ again : [ -> [ Int -> Int ]] .
+    .[ n : Int .
+        if (zero? n) then one else (times n ((again) (minus n one)))
+    ].
+].) five)
+```
+
+There's still a lot of work to do!
