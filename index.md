@@ -154,8 +154,10 @@ It looks like I was trying to come up with
  a grand unified theory of syntax from first principles,
   which, embarassingly, I was.
 And if there was anything I thought a macro could do,
- I've omitted it from the core language:
-  
+ I've omitted it from the [core language].
+ 
+[core language]: https://github.com/paulstansifer/unseemly/blob/master/core_language_basics.md
+
 Here's a program to take the factorial of 5:
 ```
 ((fix .[ again : [ -> [ Int -> Int ]] .
@@ -171,6 +173,7 @@ It's in desparate need of an `if` macro, as well as one for function definition.
 
 Here's what that `if` macro looks like,
  though the density of weird new syntax may make it hard to read:
+
 ```
 forall T . '{ (lit if) cond = ,{Expr <[Bool]<},
               (lit then) then_e = ,{Expr <[T]<},
