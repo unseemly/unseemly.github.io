@@ -10,23 +10,23 @@ title: Unseemly
 Unseemly is the first programming language to have typed macros.  
 
 Typically, macro-based languages are untyped,  
- and programmers in typed languages are rightly reluctant to use macros,  
-  because macros can make type errors incomprehensible.  
+ and programmers in typed languages are rightly reluctant to use macros,  
+  because macros can make type errors incomprehensible.  
 In Unseemly, the code that macros generate is automatically typesafe,  
- as long as the code the programmer writes passes typechecking,  
-  so it can have the best of both worlds.  
+ as long as the code the programmer writes passes typechecking,  
+  so it can have the best of both worlds.  
 (This has historically been difficult,  
-  but recent research has cleared a path.)  
+  but recent research has cleared a path.)  
 
 If you want to implement a typed language, and the types are pretty normal,  
- you can write the whole language as Unseemly macros.  
+ you can write the whole language as Unseemly macros.  
 Not only is that faster than writing the language from scratch  
- (you get the typechecker for free!),  
- but Unseemly-based languages get to share libraries and tooling,  
-  so once there's an Unseemly code-reformatter, it'll work for all Unseemly languages.  
+ (you get the typechecker for free!),  
+ but Unseemly-based languages get to share libraries and tooling,  
+  so once there's an Unseemly code-reformatter, it'll work for all Unseemly languages.  
 
 Unseemly is utterly barebones right now,  
- but it has everything you need to grow a language.  
+ but it has everything you need to grow a language.  
 
 # Typed languages and macro-based languages
 
