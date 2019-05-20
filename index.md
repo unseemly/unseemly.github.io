@@ -6,32 +6,32 @@ title: Unseemly
 *(Unseemly isn't done yet, so the claims I make about it aren't technically true yet.
   But it's pretty close!
   Unless there's a fundamental flaw I haven't found yet.)*
-  
-Unseemly is the first programming language to have typed macros.
 
-Typically, macro-based languages are untyped,
- and programmers in typed languages are rightly reluctant to use macros,
-  because macros can make type errors incomprehensible.
-In Unseemly, the code that macros generate is automatically typesafe,
- as long as the code the programmer writes passes typechecking,
-  so it can have the best of both worlds.
-(This has historically been difficult,
-  but recent research has cleared a path.)
-  
-If you want to implement a typed language, and the types are pretty normal,
- you can write the whole language as Unseemly macros.
-Not only is that faster than writing the language from scratch 
- (you get the typechecker for free!),
- but Unseemly-based languages get to share libraries and tooling,
-  so once there's an Unseemly code-reformatter, it'll work for all Unseemly languages.
+Unseemly is the first programming language to have typed macros.  
 
-Unseemly is utterly barebones right now,
- but it has everything you need to grow a language.
+Typically, macro-based languages are untyped,  
+ and programmers in typed languages are rightly reluctant to use macros,  
+  because macros can make type errors incomprehensible.  
+In Unseemly, the code that macros generate is automatically typesafe,  
+ as long as the code the programmer writes passes typechecking,  
+  so it can have the best of both worlds.  
+(This has historically been difficult,  
+  but recent research has cleared a path.)  
+
+If you want to implement a typed language, and the types are pretty normal,  
+ you can write the whole language as Unseemly macros.  
+Not only is that faster than writing the language from scratch  
+ (you get the typechecker for free!),  
+ but Unseemly-based languages get to share libraries and tooling,  
+  so once there's an Unseemly code-reformatter, it'll work for all Unseemly languages.  
+
+Unseemly is utterly barebones right now,  
+ but it has everything you need to grow a language.  
 
 # Typed languages and macro-based languages
 
 I like to divide the design of programming languages into two main families.
-It's not the only valid taxonomy, 
+It's not the only valid taxonomy,
  but it appeals to me.
 
 One family, the typed languages,
@@ -43,15 +43,15 @@ The other, smaller, family is macro-based languages.
 These are mostly direct descendants of Lisp, like Scheme and Racket.
 (If you squint, the dynamic metaprogramming systems of Ruby and JavaScript
  make them part of the family, too.)
-Programmers in those languages use metaprogramming to 
+Programmers in those languages use metaprogramming to
  abstract over surface syntax, control flow, and binding.
 
-But if you write in a typed language, 
+But if you write in a typed language,
  you almost certainly hear the advice to use the macro system sparingly.
 And Lisps (usually) lack a type system altogether.
 
 While type errors respect *function* boundaries,
- as soon as a *macro* is involved, 
+ as soon as a *macro* is involved,
   you have to wade through the macro-generated code
    to figure out why the macro went wrong,
   even if the error had nothing to do with the macro!
@@ -71,14 +71,14 @@ In Unseemly, macros have types!
 Type errors respect macros they same way they respect functions,
  so macros feel like part of the language.
 
-Unseemly's macro system is procedural, hygienic, 
+Unseemly's macro system is procedural, hygienic,
  and has access to syntax quotation,
   just like Scheme's.
 
 Unseemly's type system is algebraic, generic,
  and has access to pattern-matching,
   just like ML's.
-  
+
 These are all features that Unseemly has stolen from older, more respectable languages.
 The one new thing, which Unseemly needs to make macro types work, is called **alias annotations**.
 When you define a macro that binds names (like a lambda),
@@ -101,7 +101,7 @@ Compilers have a reputation for being hard to write. This is basically wrong.
 It's true that writing everything from the tokenizer to the assembly code generator
  for a complex language without using any outside libraries
  is a huge undertaking.
- 
+
 But that's the wrong comparison; it puts assembly language on an unearned pedestal.
 If you're a programmer, you can already write a [compiler] to some language you know (instead of assembly),
   if you're willing to spend a month or two mucking around with strings.
@@ -121,19 +121,19 @@ Now I'm a non-expert with a typechecker, and with Unseemly, you can be, too!
  in which case I could use your help sorting out some details...)
 
 [the brick wall book]: https://www.cis.upenn.edu/~bcpierce/tapl/
- 
+
 ## Most libraries can be shared between Unseemly languages
 
 If you write a library in one Unseemly-backed language,
  in most cases, programmers other Unseemly-backed language
   will be able to use your library without a foreign function interface.
 (This is like the relationship between Clojure and Java.)
-   
+
 This is why Unseemly's type system looks like
  the type system of a "real" language;
   many libraries are just a bunch of functions with types.
 If the type systems are shared, libraries can be language-agnostic.
- 
+
 ## Inline language-switching
 
 Because Unseemly macros (and their associated changes to syntax) are scoped,
@@ -147,12 +147,12 @@ Using syntax quotation rather than strings to embed code
 # What does Unseemly look like?
 
 Okay, I've been postponing showing you a code sample because Unseemly's syntax is *bats*.
-It looks like I was trying to come up with 
+It looks like I was trying to come up with
  a grand unified theory of syntax from first principles,
   which, embarassingly, I was.
 And if there was anything I thought a macro could do,
  I've omitted it from the [core language].
- 
+
 [core language]: https://github.com/paulstansifer/unseemly/blob/master/core_language_basics.md
 
 Here's a program to take the factorial of 5:
@@ -175,7 +175,7 @@ Here's what that `if` macro looks like,
 forall T . '{ (lit if) cond = ,{Expr <[Bool]<},
               (lit then) then_e = ,{Expr <[T]<},
               (lit else) else_e = ,{Expr <[T]<}, }'
- if_then_else_macro -> .{ 
+ if_then_else_macro -> .{
      '[Expr | match ,[Expr | cond], {
          +[True]+  => ,[Expr | then_e],
          +[False]+ => ,[Expr | else_e], } ]' }.
