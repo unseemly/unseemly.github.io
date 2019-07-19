@@ -80,7 +80,7 @@ Unseemly's type system is algebraic, generic,
   just like ML's.
 
 These are all features that Unseemly has stolen from older, more respectable languages.
-The one new thing, which Unseemly needs to make macro types work, is called **alias annotations**.
+The one new thing, which Unseemly needs to make macro types work, is called **binding annotations**.
 When you define a macro that binds names (like a lambda),
  you have to specify in the syntax what the binders are and where they're bound.
 
