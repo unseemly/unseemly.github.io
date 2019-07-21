@@ -25,6 +25,12 @@ time, mark, audio, video {
 
 /* Base text styles */
 
+@media only screen and (max-width: 650px) {
+  br {
+    display: none; /* Disable my hand-flowed text weirdness*/
+  }
+}
+
 body {
   padding:10px 50px 0 0;
   font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -33,8 +39,6 @@ body {
 	background-color: #FBFAF7;
 	margin: 0;
 	line-height: 1.8em;
-	-webkit-font-smoothing: antialiased;
-
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -116,7 +120,7 @@ blockquote {
 }
 
 dl, dt, dd, dl p {
-	font-color: #444;
+	color: #444;
 }
 
 dl dt {
@@ -229,7 +233,6 @@ header {
 	border-bottom-right-radius: 4px;
 	padding: 10px;
 	margin: 30px 25px 0 0;
-	-webkit-font-smoothing: antialiased;
 }
 
 p.header {
@@ -298,7 +301,6 @@ header li:hover {
 }
 
 a.buttons {
-	-webkit-font-smoothing: antialiased;
 	background: url(../images/arrow-down.png) no-repeat;
 	font-weight: normal;
 	text-shadow: rgba(0, 0, 0, 0.4) 0 -1px 0;
