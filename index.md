@@ -79,8 +79,10 @@ Unseemly's type system is algebraic, generic,
  and has access to pattern-matching,  
   just like ML's.  
 
-These are all features that Unseemly has stolen from older, more respectable languages.  
-The one new thing, which Unseemly needs to make macro types work, is called **binding annotations**.  
+Almost everything about Unseemly has stolen
+ from older, more respectable languages.  
+The one new thing, which Unseemly needs to make macro types work,  
+ is called **binding annotations**.  
 When you define a macro that binds names (like a lambda),  
  you have to specify in the syntax what the binders are and where they're bound.  
 
@@ -89,8 +91,10 @@ When you define a macro that binds names (like a lambda),
 Macros are an ergonomic way to specify source-to-source translations.  
 In other words, they're a great way to write a compiler.  
 
-In macro-based languages, the language is typically composed of a small set of "core" forms,  
- and almost every language feature the user interacts with is a macro that expands to those forms.  
+In macro-based languages,  
+ the language is typically composed of a small set of "core" forms,  
+ and almost every language feature the user interacts with  
+  is a macro that expands to those forms.  
 Language features can be built layer-by-layer, and, since they live in libraries,  
  they can be versioned separately from the core language.  
 
@@ -103,7 +107,8 @@ It's true that writing everything from the tokenizer to the assembly code genera
  is a huge undertaking.  
 
 But that's the wrong comparison; it puts assembly language on an unearned pedestal.  
-If you're a programmer, you can already write a [compiler] to some language you know (instead of assembly),  
+If you're a programmer,  
+ you can already write a [compiler] to some language you know (instead of assembly),  
   if you're willing to spend a month or two mucking around with strings.  
 
 [compiler]: http://composition.al/blog/2017/07/31/my-first-fifteen-compilers/
@@ -115,7 +120,8 @@ Unseemly makes it less tedious (with type-safe syntax quotation),
   that you shouldn't have to reimplement.  
 For example, in order to implement Unseemly,  
  I needed to write a fairly complicated typechecker.  
-I'm not an expert in types, so I just copied the rules out of [the brick wall book].  
+I'm not an expert in types,  
+ so I just copied the rules out of [the brick wall book].  
 Now I'm a non-expert with a typechecker, and with Unseemly, you can be, too!  
 (Unless you are an expert in types,  
  in which case I could use your help sorting out some details...)  
@@ -146,10 +152,11 @@ Using syntax quotation rather than strings to embed code
 
 # What does Unseemly look like?
 
-Okay, I've been postponing showing you a code sample because Unseemly's syntax is *bats*.  
+Okay, I've been postponing showing you a code sample  
+ because Unseemly's syntax is *bats*.  
 It looks like I was trying to come up with  
  a grand unified theory of syntax from first principles,  
-  which, embarassingly, I was.  
+  which, embarrassingly, I was.  
 And if there was anything I thought a macro could do,  
  I've omitted it from the [core language].  
 
@@ -166,7 +173,7 @@ Here's a program to take the factorial of 5:
     ].
 ].) five)
 ```
-It's in desparate need of an `if` macro, as well as one for function definition.  
+It's in desperate need of an `if` macro, as well as one for function definition.  
 
 Here's what that `if` macro looks like,  
  though the density of weird new syntax may make it hard to read:  
