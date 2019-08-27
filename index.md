@@ -30,132 +30,132 @@ Unseemly is utterly barebones right now,
 
 # Typed languages and macro-based languages
 
-I like to divide the design of programming languages into two main families.
-It's not the only valid taxonomy,
- but it appeals to me.
+I like to divide the design of programming languages into two main families.  
+It's not the only valid taxonomy,  
+ but it appeals to me.  
 
-One family, the typed languages,
- includes the MLs and Haskell, as well as C++, Java, Rust, and so on.
-Programmers in those languages use type systems
- both to describe data they are interested in and to express invariants.
+One family, the typed languages,  
+ includes the MLs and Haskell, as well as C++, Java, Rust, and so on.  
+Programmers in those languages use type systems  
+ both to describe data they are interested in and to express invariants.  
 
-The other, smaller, family is macro-based languages.
-These are mostly direct descendants of Lisp, like Scheme and Racket.
-(If you squint, the dynamic metaprogramming systems of Ruby and JavaScript
- make them part of the family, too.)
-Programmers in those languages use metaprogramming to
- abstract over surface syntax, control flow, and binding.
+The other, smaller, family is macro-based languages.  
+These are mostly direct descendants of Lisp, like Scheme and Racket.  
+(If you squint, the dynamic metaprogramming systems of Ruby and JavaScript  
+ make them part of the family, too.)  
+Programmers in those languages use metaprogramming to  
+ abstract over surface syntax, control flow, and binding.  
 
-But if you write in a typed language,
- you almost certainly hear the advice to use the macro system sparingly.
-And Lisps (usually) lack a type system altogether.
+But if you write in a typed language,  
+ you almost certainly hear the advice to use the macro system sparingly.  
+And Lisps (usually) lack a type system altogether.  
 
-While type errors respect *function* boundaries,
- as soon as a *macro* is involved,
-  you have to wade through the macro-generated code
-   to figure out why the macro went wrong,
-  even if the error had nothing to do with the macro!
-And type errors are the user interface of a typed language;
- they have to be comprehensible!
+While type errors respect *function* boundaries,  
+ as soon as a *macro* is involved,  
+  you have to wade through the macro-generated code  
+   to figure out why the macro went wrong,  
+  even if the error had nothing to do with the macro!  
+And type errors are the user interface of a typed language;  
+ they have to be comprehensible!  
 
-If the type system holds you responsible for generated code,
- code generation is not an abstraction.
+If the type system holds you responsible for generated code,  
+ code generation is not an abstraction.  
 
 # Unseemly is a typed macro language
 
-Languages descended from ML often have names with "ML" in them.
-Languages descended from Scheme often have names suggesting improper behavior.
-Unseemly is both a Scheme and an ML.
+Languages descended from ML often have names with "ML" in them.  
+Languages descended from Scheme often have names suggesting improper behavior.  
+Unseemly is both a Scheme and an ML.  
 
-In Unseemly, macros have types!
-Type errors respect macros they same way they respect functions,
- so macros feel like part of the language.
+In Unseemly, macros have types!  
+Type errors respect macros they same way they respect functions,  
+ so macros feel like part of the language.  
 
-Unseemly's macro system is procedural, hygienic,
- and has access to syntax quotation,
-  just like Scheme's.
+Unseemly's macro system is procedural, hygienic,  
+ and has access to syntax quotation,  
+  just like Scheme's.  
 
-Unseemly's type system is algebraic, generic,
- and has access to pattern-matching,
-  just like ML's.
+Unseemly's type system is algebraic, generic,  
+ and has access to pattern-matching,  
+  just like ML's.  
 
-These are all features that Unseemly has stolen from older, more respectable languages.
-The one new thing, which Unseemly needs to make macro types work, is called **binding annotations**.
-When you define a macro that binds names (like a lambda),
- you have to specify in the syntax what the binders are and where they're bound.
+These are all features that Unseemly has stolen from older, more respectable languages.  
+The one new thing, which Unseemly needs to make macro types work, is called **binding annotations**.  
+When you define a macro that binds names (like a lambda),  
+ you have to specify in the syntax what the binders are and where they're bound.  
 
 ## Macro languages are extensible compilers
 
-Macros are an ergonomic way to specify source-to-source translations.
-In other words, they're a great way to write a compiler.
+Macros are an ergonomic way to specify source-to-source translations.  
+In other words, they're a great way to write a compiler.  
 
-In macro-based languages, the language is typically composed of a small set of "core" forms,
- and almost every language feature the user interacts with is a macro that expands to those forms.
-Language features can be built layer-by-layer, and, since they live in libraries,
- they can be versioned separately from the core language.
+In macro-based languages, the language is typically composed of a small set of "core" forms,  
+ and almost every language feature the user interacts with is a macro that expands to those forms.  
+Language features can be built layer-by-layer, and, since they live in libraries,  
+ they can be versioned separately from the core language.  
 
 ### Aside: Compilers aren't that hard
 
-Compilers have a reputation for being hard to write. This is basically wrong.
+Compilers have a reputation for being hard to write. This is basically wrong.  
 
-It's true that writing everything from the tokenizer to the assembly code generator
- for a complex language without using any outside libraries
- is a huge undertaking.
+It's true that writing everything from the tokenizer to the assembly code generator  
+ for a complex language without using any outside libraries  
+ is a huge undertaking.  
 
-But that's the wrong comparison; it puts assembly language on an unearned pedestal.
-If you're a programmer, you can already write a [compiler] to some language you know (instead of assembly),
-  if you're willing to spend a month or two mucking around with strings.
+But that's the wrong comparison; it puts assembly language on an unearned pedestal.  
+If you're a programmer, you can already write a [compiler] to some language you know (instead of assembly),  
+  if you're willing to spend a month or two mucking around with strings.  
 
 [compiler]: http://composition.al/blog/2017/07/31/my-first-fifteen-compilers/
 
-Unseemly (like other macro-based languages)
- doesn't exist to make writing compilers *easier*; it's already not that hard.
-Unseemly makes it less tedious (with type-safe syntax quotation),
- and gives you more of the goodies (type checking, pattern-matching, parsing)
-  that you shouldn't have to reimplement.
-For example, in order to implement Unseemly,
- I needed to write a fairly complicated typechecker.
-I'm not an expert in types, so I just copied the rules out of [the brick wall book].
-Now I'm a non-expert with a typechecker, and with Unseemly, you can be, too!
-(Unless you are an expert in types,
- in which case I could use your help sorting out some details...)
+Unseemly (like other macro-based languages)  
+ doesn't exist to make writing compilers *easier*; it's already not that hard.  
+Unseemly makes it less tedious (with type-safe syntax quotation),  
+ and gives you more of the goodies (type checking, pattern-matching, parsing)  
+  that you shouldn't have to reimplement.  
+For example, in order to implement Unseemly,  
+ I needed to write a fairly complicated typechecker.  
+I'm not an expert in types, so I just copied the rules out of [the brick wall book].  
+Now I'm a non-expert with a typechecker, and with Unseemly, you can be, too!  
+(Unless you are an expert in types,  
+ in which case I could use your help sorting out some details...)  
 
 [the brick wall book]: https://www.cis.upenn.edu/~bcpierce/tapl/
 
 ## Most libraries can be shared between Unseemly languages
 
-If you write a library in one Unseemly-backed language,
- in most cases, programmers other Unseemly-backed language
-  will be able to use your library without a foreign function interface.
-(This is like the relationship between Clojure and Java.)
+If you write a library in one Unseemly-backed language,  
+ in most cases, programmers other Unseemly-backed language  
+  will be able to use your library without a foreign function interface.  
+(This is like the relationship between Clojure and Java.)  
 
-This is why Unseemly's type system looks like
- the type system of a "real" language;
-  many libraries are just a bunch of functions with types.
-If the type systems are shared, libraries can be language-agnostic.
+This is why Unseemly's type system looks like  
+ the type system of a "real" language;  
+  many libraries are just a bunch of functions with types.  
+If the type systems are shared, libraries can be language-agnostic.  
 
 ## Inline language-switching
 
-Because Unseemly macros (and their associated changes to syntax) are scoped,
- it's possible for multiple languages to coexist on equal footing in the same file.
+Because Unseemly macros (and their associated changes to syntax) are scoped,  
+ it's possible for multiple languages to coexist on equal footing in the same file.  
 
-Using syntax quotation rather than strings to embed code
- prevents problems like SQL injection
- and means that the Unseemly auto-formatter (uh, once someone writes one)
-  will format the quoted code.
+Using syntax quotation rather than strings to embed code  
+ prevents problems like SQL injection  
+ and means that the Unseemly auto-formatter (uh, once someone writes one)  
+  will format the quoted code.  
 
 # What does Unseemly look like?
 
-Okay, I've been postponing showing you a code sample because Unseemly's syntax is *bats*.
-It looks like I was trying to come up with
- a grand unified theory of syntax from first principles,
-  which, embarassingly, I was.
-And if there was anything I thought a macro could do,
- I've omitted it from the [core language].
+Okay, I've been postponing showing you a code sample because Unseemly's syntax is *bats*.  
+It looks like I was trying to come up with  
+ a grand unified theory of syntax from first principles,  
+  which, embarassingly, I was.  
+And if there was anything I thought a macro could do,  
+ I've omitted it from the [core language].  
 
 [core language]: https://github.com/paulstansifer/unseemly/blob/master/core_language_basics.md
 
-Here's a program to take the factorial of 5:
+Here's a program to take the factorial of 5:  
 ```
 ((fix .[ again : [ -> [ Int -> Int ]] .
     .[ n : Int .
@@ -166,10 +166,10 @@ Here's a program to take the factorial of 5:
     ].
 ].) five)
 ```
-It's in desparate need of an `if` macro, as well as one for function definition.
+It's in desparate need of an `if` macro, as well as one for function definition.  
 
-Here's what that `if` macro looks like,
- though the density of weird new syntax may make it hard to read:
+Here's what that `if` macro looks like,  
+ though the density of weird new syntax may make it hard to read:  
 
 ```
 forall T . '{ (lit if) cond = ,{Expr <[Bool]<},
@@ -181,7 +181,7 @@ forall T . '{ (lit if) cond = ,{Expr <[Bool]<},
          +[False]+ => ,[Expr | else_e], } ]' }.
 ```
 
-Then we don't need to use `match` to implement a factorial function:
+Then we don't need to use `match` to implement a factorial function:  
 
 ```
 ((fix .[ again : [ -> [ Int -> Int ]] .
@@ -191,4 +191,4 @@ Then we don't need to use `match` to implement a factorial function:
 ].) five)
 ```
 
-There's still a lot of work to do!
+There's still a lot of work to do!  
