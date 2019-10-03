@@ -7,7 +7,7 @@ title: Unseemly
   But it's pretty close!
   Unless there's a fundamental flaw I haven't found yet.)*
 
-Unseemly is the first programming language to have typed macros.  
+Unseemly is the first language able to safely typecheck all macros before expansion.
 
 Typically, macro-based languages are untyped,  
  and programmers in typed languages are rightly reluctant to use macros,  
@@ -157,6 +157,8 @@ Okay, I've been postponing showing you a code sample
 It looks like I was trying to come up with  
  a grand unified theory of syntax from first principles,  
   which, embarrassingly, I was.  
+I also didn't worry too much about how it looked, because  
+ the syntax (even the tokenizer!) can be completely rewritten with macros.  
 And if there was anything I thought a macro could do,  
  I've omitted it from the [core language].  
 
@@ -173,7 +175,9 @@ Here's a program to take the factorial of 5:
     ].
 ].) five)
 ```
-It's in desperate need of an `if` macro, as well as one for function definition.  
+It's really hard to read, because Unseemly doesn't have `if` statements  
+ or recursive function definitions.  
+But we can fix that!  
 
 Here's what that `if` macro looks like,  
  though the density of weird new syntax may make it hard to read:  
@@ -199,3 +203,24 @@ Then we don't need to use `match` to implement a factorial function:
 ```
 
 There's still a lot of work to do!  
+
+Here's what it could look like to add function definitions:
+```
+letfn fact = .[ n : Int .
+  if (zero? n) then one else (times n (fact (minus n one))) ].
+in (fact five)
+````
+
+...and numeric literals:
+```
+letfn fact = .[ n : Int .
+  if (zero? n) then 1 else (times n (fact (minus n 1))) ].
+in (fact 5)
+```
+
+...and binary math operators:
+```
+letfn fact = .[ n : Int .
+  if (zero? n) then 1 else n * (fact n - 1) ].
+in (fact 5)
+```
