@@ -9,8 +9,8 @@ title: Unseemly
 
 Unseemly is the first language able to safely typecheck all macros before expansion.
 
-Typically, macro-based languages are untyped,  
- and programmers in typed languages are rightly reluctant to use macros,  
+Typically, **macro-based languages** are untyped,  
+ and programmers in **typed languages** are rightly reluctant to use macros,  
   because macros can make type errors incomprehensible.  
 In Unseemly, the code that macros generate is automatically typesafe,  
  as long as the code the programmer writes passes typechecking,  
@@ -22,8 +22,8 @@ If you want to implement a typed language, and the types are pretty normal,
  you can write the whole language as Unseemly macros.  
 Not only is that faster than writing the language from scratch  
  (you get the typechecker for free!),  
- but Unseemly-based languages get to share libraries and tooling,  
-  so once there's an Unseemly code-reformatter, it'll work for all Unseemly languages.  
+ but Unseemly-based languages get to share libraries and even some tooling.  
+(Tools like text editor support and a REPL should be shareable.)
 
 Unseemly is utterly barebones right now,  
  but it has everything you need to grow a language.  
@@ -34,15 +34,15 @@ I like to divide the design of programming languages into two main families.
 It's not the only valid taxonomy,  
  but it appeals to me.  
 
-One family, the typed languages,  
+One family, the **typed languages**,  
  includes the MLs and Haskell, as well as C++, Java, Rust, and so on.  
 Programmers in those languages use type systems  
  both to describe data they are interested in and to express invariants.  
 
-The other, smaller, family is macro-based languages.  
+The other, smaller, family is **macro-based languages**.  
 These are mostly direct descendants of Lisp, like Scheme and Racket.  
 (If you squint, the dynamic metaprogramming systems of Ruby and JavaScript  
- make them part of the family, too.)  
+ make them cousins of this family)  
 Programmers in those languages use metaprogramming to  
  abstract over surface syntax, control flow, and binding.  
 
@@ -83,7 +83,7 @@ Almost everything about Unseemly has stolen
  from older, more respectable languages.  
 The one new thing, which Unseemly needs to make macro types work,  
  is called **binding annotations**.  
-When you define a macro that binds names (like a lambda),  
+When you define a macro that binds names (like a lambda or a let),  
  you have to specify in the syntax what the binders are and where they're bound.  
 
 ## Macro languages are extensible compilers
@@ -104,11 +104,11 @@ Compilers have a reputation for being hard to write. This is basically wrong.
 
 It's true that writing everything from the tokenizer to the assembly code generator  
  for a complex language without using any outside libraries  
- is a huge undertaking.  
+ could take years.  
 
-But that's the wrong comparison; it puts assembly language on an unearned pedestal.  
+But that calculation puts assembly language on an unearned pedestal.  
 If you're a programmer,  
- you can already write a [compiler] to some language you know (instead of assembly),  
+ you can already write a [compiler] to some normal language (instead of assembly),  
   if you're willing to spend a month or two mucking around with strings.  
 
 [compiler]: http://composition.al/blog/2017/07/31/my-first-fifteen-compilers/
@@ -123,8 +123,6 @@ For example, in order to implement Unseemly,
 I'm not an expert in types,  
  so I just copied the rules out of [the brick wall book].  
 Now I'm a non-expert with a typechecker, and with Unseemly, you can be, too!  
-(Unless you are an expert in types,  
- in which case I could use your help sorting out some details...)  
 
 [the brick wall book]: https://www.cis.upenn.edu/~bcpierce/tapl/
 
@@ -135,10 +133,10 @@ If you write a library in one Unseemly-backed language,
   will be able to use your library without a foreign function interface.  
 (This is like the relationship between Clojure and Java.)  
 
-This is why Unseemly's type system looks like  
- the type system of a "real" language;  
-  many libraries are just a bunch of functions with types.  
-If the type systems are shared, libraries can be language-agnostic.  
+This is why Unseemly's type system is more normal-looking  
+ than the rest of the language;  
+  library users should be able to read type signatures.  
+With a shared type systems, libraries can be language-agnostic.  
 
 ## Inline language-switching
 
@@ -202,9 +200,7 @@ Then we don't need to use `match` to implement a factorial function:
 ].) five)
 ```
 
-There's still a lot of work to do!  
-
-Here's what it could look like to add function definitions:
+Here's what it could look like if we added function definitions:
 ```
 letfn fact = .[ n : Int .
   if (zero? n) then one else (times n (fact (minus n one))) ].
@@ -221,6 +217,10 @@ in (fact 5)
 ...and binary math operators:
 ```
 letfn fact = .[ n : Int .
-  if (zero? n) then 1 else n * (fact n - 1) ].
+  if n == 0 then 1 else n * (fact n - 1) ].
 in (fact 5)
 ```
+
+Another layer of macros can impose a C-like or Scheme-like or ML-like syntax,  
+ add comments, literals, and convenience features.  
+It shouldn't take much code to get a basic language off the ground.
