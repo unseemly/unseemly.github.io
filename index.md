@@ -164,8 +164,8 @@ And if there was anything I thought a macro could do,
 
 Here's a program to take the factorial of 5:  
 ```
-((fix .[ again : [ -> [ Int -> Int ]] .
-    .[ n : Int .
+((fix .[again: [ -> [ Int -> Int ]] .
+    .[n: Int .
         match (zero? n) {
             +[True]+ => one
             +[False]+ => (times n ((again) (minus n one)))
@@ -181,9 +181,9 @@ Here's what that `if` macro looks like,
  though the density of weird new syntax may make it hard to read:  
 
 ```
-forall T . '{ (lit if) cond = ,{Expr <[Bool]<},
-              (lit then) then_e = ,{Expr <[T]<},
-              (lit else) else_e = ,{Expr <[T]<}, }'
+forall T . '{ (lit if) cond = ,{Expr<Bool>},
+              (lit then) then_e = ,{Expr<T>},
+              (lit else) else_e = ,{Expr<T>}, }'
  if_then_else_macro -> .{
      '[Expr | match ,[Expr | cond], {
          +[True]+  => ,[Expr | then_e],
@@ -193,8 +193,8 @@ forall T . '{ (lit if) cond = ,{Expr <[Bool]<},
 Then we don't need to use `match` to implement a factorial function:  
 
 ```
-((fix .[ again : [ -> [ Int -> Int ]] .
-    .[ n : Int .
+((fix .[again: [ -> [ Int -> Int ]] .
+    .[n: Int .
         if (zero? n) then one else (times n ((again) (minus n one)))
     ].
 ].) five)
@@ -202,21 +202,21 @@ Then we don't need to use `match` to implement a factorial function:
 
 Here's what it could look like if we added function definitions:
 ```
-letfn fact = .[ n : Int .
+letfn fact = .[n: Int .
   if (zero? n) then one else (times n (fact (minus n one))) ].
 in (fact five)
 ````
 
 ...and numeric literals:
-```
-letfn fact = .[ n : Int .
+```mmmm
+letfn fact = .[n: Int .
   if (zero? n) then 1 else (times n (fact (minus n 1))) ].
 in (fact 5)
 ```
 
 ...and binary math operators:
 ```
-letfn fact = .[ n : Int .
+letfn fact = .[n: Int .
   if n == 0 then 1 else n * (fact n - 1) ].
 in (fact 5)
 ```
