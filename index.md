@@ -77,7 +77,7 @@ Unseemly's type system is algebraic, generic,
  and has access to pattern-matching,  
   just like ML's.  
 
-Almost everything about Unseemly has stolen
+Almost everything about Unseemly has stolen  
  from older, more respectable languages.  
 The one new thing, which Unseemly needs to make macro types work,  
  is called **binding annotations**.  
