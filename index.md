@@ -3,9 +3,7 @@ layout: default
 title: Unseemly
 ---
 
-*(Unseemly isn't done yet, so the claims I make about it aren't technically true yet.
-  But it's pretty close!
-  Unless there's a fundamental flaw I haven't found yet.)*
+*Unseemly is unpolished and incomplete at the moment, but it does seem to work.*
 
 Unseemly is the first language able to safely typecheck all macros before expansion.
 
@@ -181,14 +179,25 @@ Here's what that `if` macro looks like,
  though the density of weird new syntax may make it hard to read:  
 
 ```
-forall T . '{ (lit if) cond = ,{Expr<Bool>},
-              (lit then) then_e = ,{Expr<T>},
-              (lit else) else_e = ,{Expr<T>}, }'
- if_then_else_macro -> .{
-     '[Expr | match ,[Expr | cond], {
-         +[True]+  => ,[Expr | then_e],
-         +[False]+ => ,[Expr | else_e], } ]' }.
+extend_syntax
+  Expr ::=also forall T . '{
+      [
+          lit ,{ DefaultToken }, = 'if'
+          cond := ( ,{ Expr<Bool> }, )
+          lit ,{ DefaultToken }, = 'then'
+          then_e := ( ,{ Expr<T> }, )
+          lit ,{ DefaultToken }, = 'else'
+          else_e := ( ,{ Expr<T> }, )
+      ]
+  }' conditional -> .{
+      '[Expr | match ,[cond], {
+                +[True]+ => ,[then_e],
+                +[False]+ => ,[else_e], } ]' }. ;
+in
+⋮
 ```
+That's not a lot of code, considering that it handles  
+ the syntax, the typing, and the actual behavior of `if`!
 
 Then we don't need to use `match` to implement a factorial function:  
 
@@ -202,25 +211,25 @@ Then we don't need to use `match` to implement a factorial function:
 
 Here's what it could look like if we added function definitions:
 ```
-letfn fact = .[n: Int .
-  if (zero? n) then one else (times n (fact (minus n one))) ].
+letfn (fact n: Int) -> Int =
+  if (zero? n) then one else (times n (fact (minus n one))) ;
 in (fact five)
 ````
 
 ...and numeric literals:
-```mmmm
-letfn fact = .[n: Int .
-  if (zero? n) then 1 else (times n (fact (minus n 1))) ].
+```
+letfn (fact n: Int) -> Int =
+  if (equals? n 0) then one else (times n (fact (minus n one))) ;
 in (fact 5)
 ```
 
 ...and binary math operators:
 ```
-letfn fact = .[n: Int .
-  if n == 0 then 1 else n * (fact n - 1) ].
+letfn (fact n: Int) -> Int =
+  if n == 0 then 1 else n * (fact n - 1)
 in (fact 5)
 ```
 
 Another layer of macros can impose a C-like or Scheme-like or ML-like syntax,  
- add comments, literals, and convenience features.  
+ add comments, more literals, and convenience features.  
 It shouldn't take much code to get a basic language off the ground.
