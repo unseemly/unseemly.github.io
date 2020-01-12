@@ -3,7 +3,7 @@ layout: default
 title: Unseemly
 ---
 
-*Unseemly is unpolished and incomplete at the moment, but it does seem to work.*
+*Unseemly has all of its core features, but it's still a long way from being practical. There's a still a lot of stuff to implement and iron out.*
 
 Unseemly is the first language able to safely typecheck all macros before expansion.
 
