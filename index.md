@@ -23,8 +23,8 @@ Not only is that faster than writing the language from scratch
  but Unseemly-based languages get to share libraries and even some tooling.  
 (Tools like text editor support and a REPL should be shareable.)
 
-Unseemly is utterly barebones right now,  
- but it has everything you need to grow a language.  
+Unseemly is utterly barebones,  
+ but it has the tools to grow a language.  
 
 # Typed languages and macro-based languages
 
