@@ -127,7 +127,7 @@ Now I'm a non-expert with a typechecker, and with Unseemly, you can be, too!
 ## Most libraries can be shared between Unseemly languages
 
 If you write a library in one Unseemly-backed language,  
- in most cases, programmers other Unseemly-backed language  
+ in most cases, programmers in other Unseemly-backed languages  
   will be able to use your library without a foreign function interface.  
 (This is like the relationship between Clojure and Java.)  
 
