@@ -1,10 +1,9 @@
+importScripts('wasm/libunseemly.js')
 
-importScripts('libunseemly.js')
-
-const { html__eval_program, wasm_init } = wasm_bindgen;
+const { html__eval_program, generate__ace_rules, generate__ace_rules__for, wasm_init } = wasm_bindgen;
 
 async function run() {
-    await wasm_bindgen('./libunseemly_bg.wasm');
+    await wasm_bindgen('./wasm/libunseemly_bg.wasm');
 
     // Doesn't seem to actually elucidate panics, though:
     wasm_init();
@@ -12,9 +11,17 @@ async function run() {
     self.addEventListener('message', function (msg) {
         var result = "[error]";
         try {
-            result = html__eval_program(msg.data);
+            if (msg.data.task == 'execute') {
+                result = html__eval_program(msg.data.program, "unseemly");
+            } else if (msg.data.task == 'ace_rules') {
+                if (msg.data.program) {
+                    result = generate__ace_rules__for(msg.data.program, msg.data.lang)
+                } else {
+                    result = generate__ace_rules(msg.data.lang)
+                }
+            }
         } finally {
-            self.postMessage(result);
+            self.postMessage({ task: msg.data.task, output: result });
         }
     })
 }
